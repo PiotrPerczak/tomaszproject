@@ -29,32 +29,32 @@ const A318 = {
   b: "2.588",
   c: "1212.084",
   cf: "0.26",
-  plf: "0.796",
-  s: "165",
+  plf: "13134",
+  s: "8250",
 };
 const A320 = {
   a: "0.000032",
   b: "2.588",
   c: "1212.084",
   cf: "0.26",
-  plf: "0.796",
-  s: "165",
+  plf: "13134",
+  s: "8250",
 };
 const A321 = {
   a: "0.000033",
   b: "2.588",
   c: "1212.084",
   cf: "0.26",
-  plf: "0.796",
-  s: "165",
+  plf: "13134",
+  s: "8250",
 };
 const A330 = {
   a: "0.000034",
   b: "4.384",
   c: "2457.737",
   cf: "0.06",
-  plf: "0.82",
-  s: "287",
+  plf: "13531.65",
+  s: "14350",
 };
 
 const B737 = {
@@ -62,32 +62,32 @@ const B737 = {
   b: "1.454",
   c: "1531.722",
   cf: "0.23",
-  plf: "0.796",
-  s: "148",
+  plf: "13134",
+  s: "7440",
 };
 const B777 = {
   a: "0.00034",
   b: "6.112",
   c: "3403.041",
   cf: "0.45",
-  plf: "0.82",
-  s: "370",
+  plf: "13531.65",
+  s: "18500",
 };
 const S1500 = {
   a: "0.000007",
   b: "2.775",
   c: "1260.608",
   cf: "0.26",
-  plf: "0.796",
-  s: "157.86",
+  plf: "13134",
+  s: "7915",
 };
 const L2500 = {
   a: "0.00029",
   b: "3.475",
   c: "3259.691",
   cf: "0.26",
-  plf: "0.82",
-  s: "302.58",
+  plf: "13531.65",
+  s: "15120",
 };
 
 function App() {
@@ -106,16 +106,18 @@ function App() {
           ((parseFloat(aircraftInfo.a) * parseFloat(distance) ** 2 +
             parseFloat(aircraftInfo.b) * parseFloat(distance) +
             parseFloat(aircraftInfo.c)) /
-            (parseFloat(aircraftInfo.s) * parseFloat(aircraftInfo.plf))) *
+            (parseFloat(aircraftInfo.s) * parseFloat(aircraftInfo.plf)) /
+            1000) *
             ((1 - parseFloat(aircraftInfo.cf)) *
               parseFloat(clas) *
               (3.16 * 3 + 0.538) +
               (0.00034 * parseFloat(distance) + 11.68)) *
-            parseFloat(trip)
+            parseFloat(trip) *
+            parseFloat(passengers)
         ),
       500
     );
-    console.log(distance);
+    console.log(result);
   }
 
   return (
@@ -250,9 +252,9 @@ function App() {
       <Card className="mt-10 h-20 flex justify-center  ">
         <Alert className="">
           <RocketIcon className="h-4 w-4" />
-          <AlertTitle>CO2 amount per passenger:</AlertTitle>
+          <AlertTitle>C02 produced on passengers:</AlertTitle>
           <AlertDescription className="text-xl text-emerald-800">
-            {result} [kg]
+            {parseFloat(result).toFixed(8)} [t]
           </AlertDescription>
         </Alert>
       </Card>
