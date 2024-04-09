@@ -1,5 +1,4 @@
 import "./App.css";
-import * as React from "react";
 import { RocketIcon } from "@radix-ui/react-icons";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -100,14 +99,16 @@ function App() {
 
   async function math() {
     const aircraftInfo = JSON.parse(aircraft);
+    const xS = (aircraftInfo.s * 50) / 1000;
+    const xPLF = (aircraftInfo.plf * (aircraftInfo.s) * 50) / 1000;
+    const divSPLF = xS * xPLF;
     setTimeout(
       () =>
         setResult(
           ((parseFloat(aircraftInfo.a) * parseFloat(distance) ** 2 +
             parseFloat(aircraftInfo.b) * parseFloat(distance) +
             parseFloat(aircraftInfo.c)) /
-            (parseFloat(aircraftInfo.s) * parseFloat(aircraftInfo.plf)) /
-            1000) *
+            divSPLF) *
             ((1 - parseFloat(aircraftInfo.cf)) *
               parseFloat(clas) *
               (3.16 * 3 + 0.538) +
@@ -137,16 +138,14 @@ function App() {
         </div>
         <Card className="w-[600px]">
           <CardHeader>
-            <CardTitle>Calculate your flight emissions!</CardTitle>
-            <CardDescription>
-              Calculate the carbon footprint of your flight in one-click.
-            </CardDescription>
+            <CardTitle>Oblicz Swój Ślad Węglowy! </CardTitle>
+            <CardDescription></CardDescription>
           </CardHeader>
           <CardContent>
             <form>
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Distance(km)</Label>
+                  <Label htmlFor="name">Odległość (km)</Label>
                   <Input
                     onChange={(event) => {
                       if (event.target.value <= 550) {
@@ -163,26 +162,26 @@ function App() {
                       }
                     }}
                     id="name"
-                    placeholder="Distance in kilometers" //
+                    placeholder="Dystans w kilometrach" //
                   />
                 </div>
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Passengers</Label>
+                  <Label htmlFor="name">Liczba Pasażerów</Label>
                   <Input
                     onChange={(event) => setPassengers(event.target.value)}
                     id="name"
-                    placeholder="Number of passengers"
+                    placeholder="Wprowadź liczbę pasażerów"
                   />
                 </div>
                 <div className="flex flex-col space-y-1.5">
-                  <Label>Aircraft type</Label>
+                  <Label>Rodzaj Samolotu</Label>
                   <Select onValueChange={setAircraft}>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a aircraft" />
+                      <SelectValue placeholder="Wybierz typ samolotu:" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Aircraft types</SelectLabel>
+                        <SelectLabel>Wybierz Typ Samolotu</SelectLabel>
                         <SelectItem value={JSON.stringify(A318)}>
                           A 318
                         </SelectItem>
@@ -202,40 +201,40 @@ function App() {
                           Boeing 777
                         </SelectItem>
                         <SelectItem value={JSON.stringify(S1500)}>
-                          Short distance to 1500km
+                          Krótko Dystansowe do 1500km
                         </SelectItem>
                         <SelectItem value={JSON.stringify(L2500)}>
-                          Long distance from 2500km
+                          Długo Dystansowe od 2500km
                         </SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="flex flex-col space-y-1.5">
-                  <Label>Trip type</Label>
+                  <Label>Rodzaj podróży</Label>
                   <Select onValueChange={setTrip}>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a type" />
+                      <SelectValue placeholder="Wybierz rodzaj podróży: " />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Trip Types</SelectLabel>
-                        <SelectItem value="1">One way</SelectItem>
-                        <SelectItem value="2">Round trip</SelectItem>
+                        <SelectLabel>Rodzaj podróży</SelectLabel>
+                        <SelectItem value="1">W Jedną Stronę</SelectItem>
+                        <SelectItem value="2">Z Lotem Powrotnym</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="framework">Class</Label>
+                  <Label htmlFor="framework">Klasa</Label>
                   <Select onValueChange={setClas}>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a class  " />
+                      <SelectValue placeholder="Wybierz klasę:  " />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Classes</SelectLabel>
-                        <SelectItem value="1">Economic</SelectItem>
+                        <SelectLabel>Klasa: </SelectLabel>
+                        <SelectItem value="1">Ekonomiczna</SelectItem>
                         <SelectItem value="1.5">Premium</SelectItem>
                       </SelectGroup>
                     </SelectContent>
@@ -245,14 +244,14 @@ function App() {
             </form>
           </CardContent>
           <CardFooter className="flex justify-end">
-            <Button onClick={math}>Calculate</Button>
+            <Button onClick={math}>Oblicz</Button>
           </CardFooter>
         </Card>
       </div>
       <Card className="mt-10 h-20 flex justify-center  ">
         <Alert className="">
           <RocketIcon className="h-4 w-4" />
-          <AlertTitle>C02 produced on passengers:</AlertTitle>
+          <AlertTitle>C02 produkowane podczas lotu wynosi:</AlertTitle>
           <AlertDescription className="text-xl text-emerald-800">
             {parseFloat(result).toFixed(8)} [t]
           </AlertDescription>
